@@ -1,5 +1,5 @@
 print("Hello World")
 print("New line added")
 print("Added line from dev branch")
-print("Conflic line from master")
+print("Conflict line from dev") 
 print("Fourth line added")
