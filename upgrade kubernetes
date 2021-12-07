@@ -33,9 +33,9 @@ sudo apt-cache madison kubeadm
 sudo apt-mark unhold kubeadm
 
 
-# Install the new version of kubeadm, here the version is 1.20.4-00
+# Install the new version of kubeadm, here the version is <refer above the ouput with apt-cache madison kubeadm>
 
-sudo apt update && sudo apt install -y kubeadm=1.20.4-00
+sudo apt update && sudo apt install -y kubeadm=<the version to upgrade to>
 
  
 # Hold the package to prevent accidential upgrade
@@ -50,7 +50,7 @@ sudo kubeadm upgrade plan
  
 # Upgrade kubeadm
 
-sudo kubeadm upgrade apply v1.20.4
+sudo kubeadm upgrade apply <version to upgrade to>
 
 
 **UPGRADE KUBECTL AND KUBELET**
@@ -67,9 +67,9 @@ sudo apt-mark unhold kubelet kubectl
 
  
 
-# Install the new version of kubelet and kubectl, here the version is 1.20.4-00
+# Install the new version of kubelet and kubectl, here the version is <refer above to apt-cache madison kubeadm>
 
-sudo apt-get update && sudo apt-get install -y kubelet=1.20.4-00 kubectl=1.20.4-00
+sudo apt-get update && sudo apt-get install -y kubelet=<version to upgradeto> kubectl=<version to upgrade to>
 
  
 
@@ -126,9 +126,9 @@ sudo apt-mark unhold kubeadm
 
  
 
-# Install the new version of kubeadm, here the version is 1.20.4-00
+# Install the new version of kubeadm, here the version is <refer above with apt-cache madison kubeadm>
 
-sudo apt update && sudo apt install -y kubeadm=1.20.4-00
+sudo apt update && sudo apt install -y kubeadm=<version to upgrade to>
 
  
 
@@ -164,9 +164,9 @@ sudo apt-mark unhold kubelet kubectl
 
  
 
-# Install the new version of kubelet and kubectl, here the version is 1.20.4-00
+# Install the new version of kubelet and kubectl, here the version is <refer above to apt-cache madison kubeadm>
 
-sudo apt-get update && sudo apt-get install -y kubelet=1.20.4-00 kubectl=1.20.4-00
+sudo apt-get update && sudo apt-get install -y kubelet=<version to upgrade to> kubectl=<version to upgrade to>
 
  
 
