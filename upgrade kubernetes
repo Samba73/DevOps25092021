@@ -58,7 +58,7 @@ sudo kubeadm upgrade apply <version to upgrade to>
 
 # Drain the control plane node
 
-kubectl drain manager --ignore-daemonsets
+kubectl drain <control plane node name> --ignore-daemonsets
 
  
 # Unholds to upgrade for kubelet and kubectl
@@ -99,7 +99,7 @@ sudo systemctl status kubelet
 
 # Uncordon the cntrol plane node.
 
-kubectl uncordon manager
+kubectl uncordon <control plane node name>
 
  
 
@@ -150,9 +150,9 @@ sudo kubeadm upgrade node
 > On control plane node
 
 
-# Drain the worker1 node
+# Drain the worker node
 
-kubectl drain worker1 --ignore-daemonsets --delete-emptydir-data
+kubectl drain <worker node (1..n) name> --ignore-daemonsets --delete-emptydir-data
 
 
 > On Worker node
@@ -191,7 +191,7 @@ sudo systemctl restart kubelet
 
 # Uncordon the worker node to bring it online and run the below command on control plane node.
 
-kubectl uncordon worker1
+kubectl uncordon <worker node name>
 
 
 Perform above steps on all the worker nodes to upgrade kubeadm, kubelet and kubectl.
