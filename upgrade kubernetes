@@ -1,5 +1,26 @@
 # UPGRADE KUBERNETES CLUSTER
 
+*****************************************
+********Master node ****************
+kubeadm upgrade plan (just to confirm version to upgrade)
+kubectl drain <master/control plane> --ignore-daemonsets
+apt-get update
+apt-get install kubeadm=<version to upgrade>
+kubeadm upgrade apply <version to apply upgrade>
+apt-get install kubelet=<version to upgrade>
+systemctl restart kubelet ---> use sudo
+kubectl uncordon <master/control plane>
+
+************** Worker node*************
+kubectl drain <worker node> --ignore-daemonsets --> execute from master /control plane
+apt-get install kubeadm=<version to upgrade>
+kubeadm upgrade node
+apt-get install kubelet=<version to upgrade>
+systemctl restart kubelet
+kubeadm uncordon <worker node> --> execute from master / control plane
+
+****************************************
+
 Below are the steps we need to perform for upgrading the **Kubernetes** cluster.
 
 Note: This document is only from the exam point of view and for upgrading production based clusters, we need to take more points into consideration.
