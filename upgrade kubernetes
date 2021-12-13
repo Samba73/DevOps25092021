@@ -17,7 +17,7 @@ sudo apt-get install -y kubelet=<version to upgrade> kubectl=<version to upgrade
 sudo apt-mark hold kubelet kubectl
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
-sudo uncordon <master /control plane>
+kubectl uncordon <master /control plane>
 kubectl get node (Master / control plane Ready status :))
 
 
