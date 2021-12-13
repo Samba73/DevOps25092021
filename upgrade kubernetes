@@ -33,7 +33,7 @@ sudo apt-mark hold kubelet kubectl
 sudo systemctl daemon-reload
 sudo systemctl restart kubelet
 kubectl get node (worker node will be Ready but scheduling disabled due to drain (cordoned)) --> execute this command from master / control plane
-sudo uncordon <worker node> --> execute this command from master / control plane
+kubectl uncordon <worker node> --> execute this command from master / control plane
 kubectl get node (Both master / control plane and worker Ready status :)) --> execute this from master / control plane
 
 ****************************************
