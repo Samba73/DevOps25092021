@@ -1,0 +1,58 @@
+*********************************************************************
+************** master / control plane ******************************
+sudo -i
+apt-get update && apt-get upgrade -y   (standard process)
+apt-get install -y docker.io  (install docker)
+sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main" (add new repo for kubernetes)
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - (add gpg key to the package) --> OK
+apt-get update (standard step)
+apt-get install -y kubeadm=<version> kubelet=<version> kubectl=<version> ex. 1.21.1-00
+apt-mark hold kubeadm kubelet kubectl (put hold on these to avoid accidental update)
+wget https://docs.projectcalico.org/manifests/calico.yaml  (use calico for CNI)
+less calico.yaml | grep value --> just to confirm the value: "192.168.0.0/16"
+find ip of master / control plane node (use hostname -i or ip addr show)
+nano (vim) /etc/hosts (open the hosts file to add this plane with hostname )
+add <master/control plane ip> <hostname>  above 127.0.0.1 localhost and save the file ex. 172.31.11.154 k8scp
+nano kubeadm-config.yaml (create manifest for kubeadm config that will be injected with kubeadm init command - the yaml content belpw
+      
+      apiVersion: kubeadm.k8s.io/v1beta2
+      kind: ClusterConfiguration
+      kubernetesVersion: 1.21.1
+      controlPlaneEndpoint: "k8scp:643"
+      networking:
+        podSubnet: 192.168.0.0/16
+        
+kubeadm init --config=kubeadm-config.yaml --upload-certs | tee kubeadm-init.out (initialize the master / control plane , save output for later use)
+exit as root
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+sudo cp /root/calico.yaml . (copy CNI yaml to non-root )
+kubectl apply -f calico.yaml. (apply the manifest to create CNI)
+
+************. worker node ***********************************
+sudo -i
+apt-get update && apt-get upgrade -y
+apt-get install -y docker.io
+sudo apt-add-repository "deb http://apt.kubernetes.io/ kubernetes-xenial main" (add new repo for kubernetes)
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - (add gpg key to the package) --> OK
+apt-get update
+apt-get install -y kubeadm=<version> kubelet=<version> kubectl=<version> ex. 1.21.1-00
+apt-mark hold kubeadm kubelet kubectl
+sudo kubeadm token create (execute in master / control plane) - this is to add worker node to master / control using token as one of parameter
+execute following line 44 to line 46 in master / control plane - create and use discovery roken CA Cert hash created from the cp to ensure node joins the cluster secured
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa \
+-pubin -outform der 2>/dev/null | openssl dgst \
+-sha256 -hex | sed 's/ˆ.* //'
+
+nano /etc/hosts and add master/control plane ip and hostname and save
+execute line 50 to line 54 from worker node to connect the worker node to master / control plane
+kubeadm join \
+--token <replace with token from line 42> \
+k8scp:6443 \ --> master/control plan entry with port
+--discovery-token-ca-cert-hash \
+sha256:<replace with output from line 44 to line 46)
+exit from root
+
+Go back to master / control plan and run kubectl get no command
+both the master / control plane and worker node be running
